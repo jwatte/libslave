@@ -141,6 +141,7 @@ int main(int argc, char** argv) {
     std::string password;
     std::string database;
     unsigned int port = 3306;
+    bool gotpwd = false;
 
     while (1) {
         int c = ::getopt(argc, argv, "h:u:p:P:d:");
@@ -159,6 +160,7 @@ int main(int argc, char** argv) {
 
         case 'p':
             password = optarg;
+            gotpwd = true;
             break;
 
         case 'd':
@@ -175,7 +177,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    if (host.empty() || user.empty() || database.empty() || password.empty()) {
+    if (host.empty() || user.empty() || database.empty() || !gotpwd) {
         std::cout << "Usage: libslave_test -h <mysql host> -u <mysql user> -p <mysql password> -d <mysql database> "
                   << "<table name> <table name> ..." << std::endl;
         return 1;

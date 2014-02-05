@@ -11,7 +11,7 @@ ADD_DEFINITIONS (-O3 -finline-functions -Wno-inline -Wall -pthread -fPIC)
 OPTION (ENABLE_STATIC "Build static libslave" ON)
 OPTION (ENABLE_TEST "Test binary" ON)
 
-FIND_PATH (MYSQL_INCLUDE_DIR mysql/mysql.h
+FIND_PATH (MYSQL_INCLUDE_DIR mysql.h
 		$ENV{MYSQL_INCLUDE_DIR}
 		$ENV{MYSQL_DIR}/include
 		/usr/include/mysql

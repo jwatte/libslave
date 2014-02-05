@@ -659,17 +659,20 @@ void Slave::check_master_version() {
 
         const char* v = tmp.data();
 
+        int z[3] = { 0 };
+
         for (int i = 0; i < 3; ++i) {
 
             char* e;
 
-            int z = ::strtoul(v, &e, 10);
+            z[i] = ::strtoul(v, &e, 10);
+            fprintf(stderr, "i=%d, z[i]=%d\n", i, z[i]);
 
             /* Mysql version >= 5.1.23 */
 
-            if ((z >= 5 && i == 0) ||
-                (z >= 1 && i == 1) ||
-                (z >= 23 && i == 2)) {
+            if ((z[i] >= 5 && i == 0) ||
+                (z[i] >= 1 && i == 1) ||
+                ((z[i] >= 23 || z[1] > 1) && i == 2)) {
 
                 //
 
