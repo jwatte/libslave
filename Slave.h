@@ -28,13 +28,13 @@
 #include <set>
 
 
-#include <my_global.h>
+#include <mysql/my_global.h>
 #undef min
 #undef max
 
-#include <mysql.h>
-#include <m_ctype.h>
-#include <sql_common.h>
+#include <mysql/mysql.h>
+#include <mysql/m_ctype.h>
+#include <mysql/sql_common.h>
 
 #include "slave_log_event.h"
 #include "SlaveStats.h"

@@ -17,11 +17,11 @@
 #include <map>
 #include <set>
 
-#include <my_global.h>
+#include <mysql/my_global.h>
 #undef min
 #undef max
 
-#include <mysql.h>
+#include <mysql/mysql.h>
 
 #include "relayloginfo.h"
 #include "slave_log_event.h"
@@ -166,16 +166,17 @@ inline void check_format_description(const char* buf, unsigned int event_len) {
     size_t number_of_event_types =
         event_len - (LOG_EVENT_MINIMAL_HEADER_LEN + ST_COMMON_HEADER_LEN_OFFSET + 1);
 
-    if (number_of_event_types != LOG_EVENT_TYPES) {
+    if (number_of_event_types != LOG_EVENT_TYPES_26 &&
+        number_of_event_types != LOG_EVENT_TYPES_27) {
 
         LOG_ERROR(log, "Invalid Format_description event: number_of_event_types " << number_of_event_types
-                  << " != " << LOG_EVENT_TYPES);
+                  << " != " << LOG_EVENT_TYPES_26 << " or " << LOG_EVENT_TYPES_27);
         ::abort();
     }
 
-    unsigned char event_lens[LOG_EVENT_TYPES] = { 0, };
+    unsigned char event_lens[LOG_EVENT_TYPES_MAX] = { 0, };
 
-    ::memcpy(&event_lens[0], (unsigned char*)(buf + ST_COMMON_HEADER_LEN_OFFSET + 1), LOG_EVENT_TYPES);
+    ::memcpy(&event_lens[0], (unsigned char*)(buf + ST_COMMON_HEADER_LEN_OFFSET + 1), LOG_EVENT_TYPES_MAX);
 
     check_format_description_postlen(event_lens, XID_EVENT, 0);
     check_format_description_postlen(event_lens, QUERY_EVENT, QUERY_HEADER_LEN);
@@ -243,6 +244,7 @@ bool read_log_event(const char* buf, uint event_len, Basic_event_info& bei)
     case BEGIN_LOAD_QUERY_EVENT:
     case EXECUTE_LOAD_QUERY_EVENT:
     case INCIDENT_EVENT:
+    case HEARTBEAT_EVENT:
         return false;
         break;
 
